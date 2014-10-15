@@ -33,6 +33,9 @@ class BootstrapFormExtension extends \Twig_Extension
     /** @var integer */
     private $simpleCol = false;
 
+    /** @var array */
+    private $settingsStack = [];
+
     /**
      * {@inheritdoc}
      */
@@ -49,6 +52,8 @@ class BootstrapFormExtension extends \Twig_Extension
             new \Twig_SimpleFunction('bootstrap_get_label_col', array($this, 'getLabelCol')),
             new \Twig_SimpleFunction('bootstrap_set_simple_col', array($this, 'setSimpleCol')),
             new \Twig_SimpleFunction('bootstrap_get_simple_col', array($this, 'getSimpleCol')),
+            new \Twig_SimpleFunction('bootstrap_backup_form_settings', array($this, 'backupFormSettings')),
+            new \Twig_SimpleFunction('bootstrap_restore_form_settings', array($this, 'restoreFormSettings')),
             'checkbox_row'  => new \Twig_Function_Node(
                 'Symfony\Bridge\Twig\Node\SearchAndRenderBlockNode',
                 array('is_safe' => array('html'))
@@ -175,6 +180,34 @@ class BootstrapFormExtension extends \Twig_Extension
     public function getSimpleCol()
     {
         return $this->simpleCol;
+    }
+
+    /**
+     * Backup the form settings to the stack.
+     */
+    public function backupFormSettings()
+    {
+        $settings = [
+            'style'     => $this->style,
+            'colSize'   => $this->colSize,
+            'widgetCol' => $this->widgetCol,
+            'labelCol'  => $this->labelCol,
+            'simpleCol' => $this->simpleCol,
+        ];
+        array_push($this->settingsStack, $settings);
+    }
+
+    /**
+     * Restore the form settings from the stack.
+     */
+    public function restoreFormSettings()
+    {
+        $settings = array_pop($this->settingsStack);
+        $this->style     = $settings['style'];
+        $this->colSize   = $settings['colSize'];
+        $this->widgetCol = $settings['widgetCol'];
+        $this->labelCol  = $settings['labelCol'];
+        $this->simpleCol = $settings['simpleCol'];
     }
 
     public function formControlStaticFunction($label, $value)
