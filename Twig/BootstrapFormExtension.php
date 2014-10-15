@@ -184,6 +184,10 @@ class BootstrapFormExtension extends \Twig_Extension
 
     /**
      * Backup the form settings to the stack.
+     *
+     * @internal Should only be used at the beginning of form_start. This allows
+     *           a nested subform to change its settings without affecting its
+     *           parent form.
      */
     public function backupFormSettings()
     {
@@ -194,15 +198,25 @@ class BootstrapFormExtension extends \Twig_Extension
             'labelCol'  => $this->labelCol,
             'simpleCol' => $this->simpleCol,
         ];
+
         array_push($this->settingsStack, $settings);
     }
 
     /**
      * Restore the form settings from the stack.
+     *
+     * @internal Should only be used at the end of form_end.
+     * @see backupFormSettings
+     * @throws \UnderflowException
      */
     public function restoreFormSettings()
     {
+        if (count($this->settingsStack) < 1) {
+            throw new \UnderflowException("No settings on the stack to restore");
+        }
+
         $settings = array_pop($this->settingsStack);
+
         $this->style     = $settings['style'];
         $this->colSize   = $settings['colSize'];
         $this->widgetCol = $settings['widgetCol'];
