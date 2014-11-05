@@ -191,13 +191,13 @@ class BootstrapFormExtension extends \Twig_Extension
      */
     public function backupFormSettings()
     {
-        $settings = [
+        $settings = array(
             'style'     => $this->style,
             'colSize'   => $this->colSize,
             'widgetCol' => $this->widgetCol,
             'labelCol'  => $this->labelCol,
             'simpleCol' => $this->simpleCol,
-        ];
+        );
 
         array_push($this->settingsStack, $settings);
     }
