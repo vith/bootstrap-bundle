@@ -34,7 +34,7 @@ class BootstrapFormExtension extends \Twig_Extension
     private $simpleCol = false;
 
     /** @var array */
-    private $settingsStack = [];
+    private $settingsStack = array();
 
     /**
      * {@inheritdoc}
