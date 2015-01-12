@@ -232,6 +232,7 @@
     {% spaceless %}
         {% set style = style|default(bootstrap_get_style()) %}
         {% set col_size = col_size|default(bootstrap_get_col_size()) %}
+        {% set actually_align_with_widget = (align_with_widget is defined or attr.align_with_widget is defined) and style == 'horizontal' %}
 
         {% if attr.label_col is defined and attr.label_col is not empty %}
             {% set label_col = attr.label_col %}
@@ -247,7 +248,7 @@
         {% endif %}
 
         {% set class = '' %}
-        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+        {% if actually_align_with_widget %}
             {% set widget_col = widget_col|default(bootstrap_get_widget_col()) %}
             {% set label_col = label_col|default(bootstrap_get_label_col()) %}
             {% set class = 'col-' ~ col_size ~ '-' ~ widget_col ~ ' col-' ~ col_size ~ '-offset-' ~ label_col %}
@@ -289,7 +290,7 @@
 
         {{ block('form_help') }}
 
-        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+        {% if actually_align_with_widget %}
             </div>
             </div>
         {% elseif no_form_group is not defined or no_form_group == false %}
@@ -304,7 +305,9 @@
     {% spaceless %}
         {% set class = '' %}
 
+        {% set style = style|default(bootstrap_get_style()) %}
         {% set col_size = col_size|default(bootstrap_get_col_size()) %}
+        {% set actually_align_with_widget = (align_with_widget is defined or attr.align_with_widget is defined) and style == 'horizontal' %}
 
         {% if attr.label_col is defined and attr.label_col is not empty %}
             {% set label_col = attr.label_col %}
@@ -316,7 +319,7 @@
             {% set col_size = attr.col_size %}
         {% endif %}
 
-        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+        {% if actually_align_with_widget %}
             {% set widget_col = widget_col|default(bootstrap_get_widget_col()) %}
             {% set label_col = label_col|default(bootstrap_get_label_col()) %}
             {% set class = ' col-'~ col_size ~ '-' ~ widget_col ~ ' col-' ~ col_size ~ '-offset-' ~ label_col %}
@@ -358,7 +361,7 @@
 
         {{ block('form_help') }}
 
-        {% if align_with_widget is defined or attr.align_with_widget is defined %}
+        {% if actually_align_with_widget %}
             </div>
             </div>
         {% elseif no_form_group is not defined or no_form_group == false %}
